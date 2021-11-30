@@ -29,5 +29,6 @@ namespace Game.Objects
         {
             // тут пусто
         }
+
     }
 }
