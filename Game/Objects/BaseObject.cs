@@ -12,6 +12,7 @@ namespace Game.Objects
         public float Y;
         public float Angle;
 
+        public Action<BaseObject, BaseObject> OnOverlap;
         public BaseObject(float x, float y, float angle)
         {
             X = x;
@@ -29,6 +30,33 @@ namespace Game.Objects
         {
             // тут пусто
         }
+        public virtual GraphicsPath GetGraphicsPath()
+        {
+            return new GraphicsPath();
+        }
+        public virtual bool Overlaps(BaseObject obj, Graphics g)
+        {
+            // берем информацию о форме
+            var path1 = this.GetGraphicsPath();
+            var path2 = obj.GetGraphicsPath();
 
+            // применяем к объектам матрицы трансформации
+            path1.Transform(this.GetTransform());
+            path2.Transform(obj.GetTransform());
+
+            // используем класс Region, который позволяет определить 
+            // пересечение объектов в данном графическом контексте
+            var region = new Region(path1);
+            region.Intersect(path2); // пересекаем формы
+            return !region.IsEmpty(g); // если полученная форма не пуста то значит было пересечение
+        }
+
+        public virtual void Overlap(BaseObject obj)
+        {
+            if (this.OnOverlap != null)
+            {
+                this.OnOverlap(this, obj);
+            }
+        }
     }
 }

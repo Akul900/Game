@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace Game.Objects
 {
     class MyRectangle : BaseObject
     {
+      
         public MyRectangle(float x, float y, float angle) : base(x, y, angle)
         {
         }
@@ -15,8 +17,15 @@ namespace Game.Objects
         public override void Render(Graphics g)
         {
             // и запихиваем туда код из формы
-            g.FillRectangle(new SolidBrush(Color.Yellow), -25, -15, 50, 30);
-            g.DrawRectangle(new Pen(Color.Red, 2), -25, -15, 50, 30);
+            g.FillEllipse(new SolidBrush(Color.Yellow), -15, -15, 30, 30);
+            g.DrawEllipse(new Pen(Color.Red, 2), -15, -15, 30, 30);
+        }
+
+        public override GraphicsPath GetGraphicsPath()
+        {
+            var path = base.GetGraphicsPath();
+            path.AddEllipse(-15, -15, 30, 30);
+            return path;
         }
     }
 }
